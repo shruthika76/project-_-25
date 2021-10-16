@@ -1,59 +1,87 @@
 const Engine = Matter.Engine;
-const World= Matter.World;
+const World = Matter.World;
 const Bodies = Matter.Bodies;
+const Body = Matter.Body;
 
-var engine, world;
-var box1, pig1;
+var ball,groundObj,leftSide,rightSide;
+var world;
+var radius = 70;
+
 function preload(){
-    backgroundImage=loadImage("sprites/bg.png");
-}
-function setup(){
-    var canvas = createCanvas(1200,400);
-    engine = Engine.create();
-    world = engine.world;
 
+	dustbinImg = loadImage("dustbin.png");
+	paperImg = loadImage("paper.png");
+
+	//dustbinImg = addImage("dustbin.png");
+	//paperImg = addImage("paper.png");
+
+	//dustbin.loadImage("dustbin.png");
+	//paper.addImage("paper.png");
+	
+	//dustbin.loadImage("dustbin.png");
+	//paper.loadImage("paper.png");
+}
+
+
+function setup() {
+	createCanvas(1600, 700);
+	rectMode(CENTER);
+
+	engine = Engine.create();
+	world = engine.world;
+
+	var ball_options={
+		isStatic:false,
+		restitution:0.3,
+		density:0.4
+	}
+
+	ball = Bodies.circle(260,100,radius/2.6,ball_options);
+	World.add(world,ball);
+
+	ground=new Ground(width/2,670,width,20);
+	leftSide = new Ground(1100,600,10,120);
+	rightSide = new Ground(1270,600,10,120);
+	bottomSide = new Ground(1185,650,150,20);
+
+	Engine.run(engine);
+  
+}
+
+
+function draw() {
+	background(200);
+	rectMode(CENTER);
+
+
+	ground.display();
+	leftSide.display();  
+	rightSide.display();
+	bottomSide.display();
+
+	
+	imageMode(CENTER);
+
+	//image(paperImg,ball.position.y,ball.position.x,radius,radius);
+	//image(paperImg,ball.position.x,ball.position.y,radius/2,radius/2);
+	//ellipse(ball.position.x,ball.position.y,radius,radius);
+	image(paperImg,ball.position.x,ball.position.y,radius,radius);
+
+
+	
+	//image(1185, 570, 200,200);
+	//rect(1185, 570, 200,200);
+	image(dustbinImg, 1185, 570, 200,200);
+	//ellipse(1185, 570, 200,200)
+
+
+
+}
+
+function keyPressed() {
+  	if (keyCode === UP_ARROW) {
+
+		Matter.Body.applyForce(ball,ball.position,{x:85,y:-85});
     
-    ground = new Ground(600,height,1200,20)
-
-    box1 = new Box(700,320,70,70);
-    box2 = new Box(920,320,70,70);
-    pig1 = new Pig(810, 350);
-    log1 = new Log(810,260,300, PI/2);
-
-    box3 = new Box(700,240,70,70);
-    box4 = new Box(920,240,70,70);
-    pig3 = new Pig(810, 220);
-
-    log3 =  new Log(810,180,300, PI/2);
-
-    box5 = new Box(810,160,70,70);
-    log4 = new Log(760,120,150, PI/7);
-    log5 = new Log(870,120,150, -PI/7);
-
-    bird = new Bird(100,100);
-
-}
-
-function draw(){
-    background(backgroundImage);
-    Engine.update(engine);
-    console.log(box2.body.position.x);
-    console.log(box2.body.position.y);
-    console.log(box2.body.angle);
-    box1.display();
-    box2.display();
-    ground.display();
-    pig1.display();
-    log1.display();
-
-    box3.display();
-    box4.display();
-    pig3.display();
-    log3.display();
-
-    box5.display();
-    log4.display();
-    log5.display();
-
-    bird.display();
+  	}
 }
